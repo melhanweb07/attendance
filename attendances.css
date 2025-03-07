@@ -389,3 +389,55 @@ button:active {
         border-color: #444;
     }
 } 
+.date-time-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.date-input, .subject-input {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.date-input label, .subject-input label {
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+#subject-name {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 200px;
+    transition: border-color 0.3s ease;
+}
+
+#subject-name:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+/* Update the absence report header styles */
+.absence-header {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.absence-header h3 {
+    margin: 0 0 10px 0;
+    color: #2c3e50;
+}
+
+.absence-header p {
+    margin: 5px 0;
+    color: #34495e;
+    font-size: 14px;
+} 
