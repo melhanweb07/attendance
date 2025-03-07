@@ -13,13 +13,23 @@
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>AI&DS Attendance (2nd Year)</h1>
-            <div class="date-time">
-                <input type="date" id="attendance-date">
-                <div class="current-time" id="current-time"></div>
+        <div class="header">
+            <h1>AI&DS Attendance System</h1>
+            <div class="date-time-container">
+                <div class="date-input">
+                    <label for="attendance-date">Date:</label>
+                    <input type="date" id="attendance-date" required>
+                </div>
+                <div class="subject-input">
+                    <label for="subject-name">Subject:</label>
+                    <input type="text" id="subject-name" placeholder="Enter subject name" required>
+                </div>
+                <div class="current-time">
+                    <i class="fas fa-clock"></i>
+                    <span id="current-time">--:--</span>
+                </div>
             </div>
-        </header>
+        </div>
 
         <div class="period-info">
             <div class="current-period">
@@ -64,5 +74,6 @@
         </div>
     </div>
     <script src="attendance.js"></script>
+    <href></href>
 </body>
 </html> 
