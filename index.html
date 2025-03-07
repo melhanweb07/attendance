@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>AI&DS Attendance System</title>
+    <link rel="stylesheet" href="attendances.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI&DS Attendance (2nd Year)</h1>
+            <div class="date-time">
+                <input type="date" id="attendance-date">
+                <div class="current-time" id="current-time"></div>
+            </div>
+        </header>
+
+        <div class="period-info">
+            <div class="current-period">
+                Current Period: <span id="current-period">-</span>
+            </div>
+            <div class="time-table">
+                <h3>Time Table</h3>
+                <div class="session morning">
+                    <h4>Morning Session</h4>
+                    <p><i class="fas fa-clock"></i> Period 1: 9:00 - 9:50</p>
+                    <p><i class="fas fa-clock"></i> Period 2: 9:50 - 10:40</p>
+                    <p class="break"><i class="fas fa-coffee"></i> Break: 10:40 - 11:00</p>
+                    <p><i class="fas fa-clock"></i> Period 3: 11:00 - 11:50</p>
+                    <p><i class="fas fa-clock"></i> Period 4: 11:50 - 12:40</p>
+                </div>
+                <div class="break-time">
+                    <p><i class="fas fa-utensils"></i> Lunch Break: 12:40 - 1:30</p>
+                </div>
+                <div class="session afternoon">
+                    <h4>Afternoon Session</h4>
+                    <p><i class="fas fa-clock"></i> Period 5: 1:30 - 2:15</p>
+                    <p><i class="fas fa-clock"></i> Period 6: 2:15 - 3:00</p>
+                    <p><i class="fas fa-clock"></i> Period 7: 3:00 - 3:45</p>
+                    <p><i class="fas fa-clock"></i> Period 8: 3:45 - 4:30</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="students-grid" id="students-list">
+            <!-- Student cards will be dynamically added here -->
+        </div>
+
+        <div class="absence-report">
+            <h2>Today's Absence Report</h2>
+            <div id="absence-list"></div>
+        </div>
+
+        <div class="controls">
+            <button id="mark-all"><i class="fas fa-check-double"></i> All Present</button>
+            <button id="unmark-all"><i class="fas fa-times"></i> All Absent</button>
+            <button id="submit-attendance" class="submit-btn"><i class="fas fa-save"></i> Submit</button>
+        </div>
+    </div>
+    <script src="attendance.js"></script>
+</body>
+</html> 
