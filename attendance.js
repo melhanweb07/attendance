@@ -291,7 +291,7 @@ function initializeControls() {
     document.getElementById('submit-attendance').addEventListener('click', submitAttendance);
 }
 
-function displayAbsenceReport(date, period, absentees) {
+function displayAbsenceReport(date, period, subject, absentees) {
     const absenceList = document.getElementById('absence-list');
     absenceList.innerHTML = '';
 
@@ -301,13 +301,14 @@ function displayAbsenceReport(date, period, absentees) {
         day: 'numeric'
     });
 
-    // Add header with date and period
+    // Add header with date, period, and subject
     const header = document.createElement('div');
     header.className = 'absence-header';
     header.innerHTML = `
         <h3>Absence Report</h3>
         <p>Date: ${formattedDate}</p>
         <p>Period: ${period}</p>
+        <p>Subject: ${subject}</p>
         <p>Total Absentees: ${absentees.length}</p>
     `;
     absenceList.appendChild(header);
@@ -355,7 +356,7 @@ function displayAbsenceReport(date, period, absentees) {
     const exportBtn = document.createElement('button');
     exportBtn.className = 'export-btn';
     exportBtn.innerHTML = '📥 Export Report';
-    exportBtn.onclick = () => exportAbsenceReport(date, period, absentees);
+    exportBtn.onclick = () => exportAbsenceReport(date, period, subject, absentees);
     absenceList.appendChild(exportBtn);
 
     // Make the absence list section visible
@@ -363,8 +364,8 @@ function displayAbsenceReport(date, period, absentees) {
     absenceList.scrollIntoView({ behavior: 'smooth' });
 }
 
-// Function to export absence report
-function exportAbsenceReport(date, period, absentees) {
+// Update the export function to include subject
+function exportAbsenceReport(date, period, subject, absentees) {
     const formattedDate = new Date(date).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
@@ -375,6 +376,7 @@ function exportAbsenceReport(date, period, absentees) {
     csvContent += "Absence Report\n";
     csvContent += `Date: ${formattedDate}\n`;
     csvContent += `Period: ${period}\n`;
+    csvContent += `Subject: ${subject}\n`;
     csvContent += `Total Absentees: ${absentees.length}\n\n`;
     csvContent += "Student ID,Name,Status\n";
 
@@ -385,7 +387,7 @@ function exportAbsenceReport(date, period, absentees) {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `absence_report_${date}_period${period}.csv`);
+    link.setAttribute("download", `absence_report_${date}_${subject}_period${period}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -396,6 +398,13 @@ async function submitAttendance() {
         // Prevent double submission
         const submitBtn = document.getElementById('submit-attendance');
         if (submitBtn.disabled) {
+            return;
+        }
+
+        // Validate subject name
+        const subjectName = document.getElementById('subject-name').value.trim();
+        if (!subjectName) {
+            showToast('Please enter the subject name ❌');
             return;
         }
 
@@ -421,6 +430,7 @@ async function submitAttendance() {
                 absentees.push({
                     date: date,
                     period: currentPeriod,
+                    subject: subjectName,
                     id: studentId,
                     name: studentName,
                     status: 'Absent',
@@ -430,10 +440,10 @@ async function submitAttendance() {
         });
 
         // First, display the absence report immediately
-        displayAbsenceReport(date, currentPeriod, absentees);
+        displayAbsenceReport(date, currentPeriod, subjectName, absentees);
 
         // Google Apps Script Web App URL
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzmOIwBDQbFYeUoiwrR0O-d4bS53cUwfCrhDJ_Bgsksr3O7o7u--YLlAKIz3MlKlWdk3A/exec';
+        const GOOGLE_SCRIPT_URL ='https://script.google.com/macros/s/AKfycbyyruUz5-4bS7q1HgyUBGkRvrppWK5C_HRiUxEa_VCqB_DulBIKm5wRbMmaQZY7pCUEdw/exec';
 
         // Show submitting message
         showToast('Submitting attendance data... ⏳');
@@ -448,7 +458,7 @@ async function submitAttendance() {
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = GOOGLE_SCRIPT_URL;
-        form.target = 'submit_iframe'; // Target the hidden iframe
+        form.target = 'submit_iframe';
 
         // Add the data as a hidden input
         const dataInput = document.createElement('input');
@@ -457,7 +467,11 @@ async function submitAttendance() {
         dataInput.value = JSON.stringify({
             date: date,
             period: currentPeriod,
-            absentees: absentees
+            subject: subjectName,
+            absentees: absentees.map(student => ({
+                ...student,
+                subject: subjectName // Ensure subject is included in each student record
+            }))
         });
         form.appendChild(dataInput);
 
@@ -568,7 +582,7 @@ function showToast(message) {
 // Update fetchAttendanceHistory function to use the same URL
 async function fetchAttendanceHistory(date, period) {
     try {
-        const GOOGLE_SCRIPT_URL ='https://script.google.com/macros/s/AKfycbytjR5lFJHnC5oCkd6mXGP6CyaHnT0sdFqJcCsLDy-8l3vziaewRTjsDX7AtpkEEuqWCA/exec';
+        const GOOGLE_SCRIPT_URL='https://script.google.com/macros/s/AKfycbzoiig1fnmT5SEuvDrHjNRm9Jk54l_4cast10x3s2MllloE-QqJbdKZrJmeddc2LBsB6Q/exec';
         
         console.log('Fetching attendance history for:', date, period);
         
