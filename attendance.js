@@ -458,7 +458,7 @@ async function submitAttendance() {
         const successCallback = document.createElement('input');
         successCallback.type = 'hidden';
         successCallback.name = 'callback';
-        successCallback.value = 'handleFormSubmitSuccess';
+        successCallback.value = 'submitted succussfully';
         form.appendChild(successCallback);
 
         // Add the form to the document body
