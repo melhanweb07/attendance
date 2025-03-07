@@ -433,15 +433,22 @@ async function submitAttendance() {
         displayAbsenceReport(date, currentPeriod, absentees);
 
         // Google Apps Script Web App URL
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzzyz7_Uh25frVtmf_p7dOVvLM17Jk116I2BmaMNoyhKY0ffSt700BvJi5LrFOLV42h6g/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzmOIwBDQbFYeUoiwrR0O-d4bS53cUwfCrhDJ_Bgsksr3O7o7u--YLlAKIz3MlKlWdk3A/exec';
 
         // Show submitting message
         showToast('Submitting attendance data... ⏳');
+
+        // Create a hidden iframe for submission
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.name = 'submit_iframe';
+        document.body.appendChild(iframe);
 
         // Create a form element
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = GOOGLE_SCRIPT_URL;
+        form.target = 'submit_iframe'; // Target the hidden iframe
 
         // Add the data as a hidden input
         const dataInput = document.createElement('input');
@@ -454,29 +461,8 @@ async function submitAttendance() {
         });
         form.appendChild(dataInput);
 
-        // Add success callback
-        const successCallback = document.createElement('input');
-        successCallback.type = 'hidden';
-        successCallback.name = 'callback';
-        successCallback.value = 'submitted succussfully';
-        form.appendChild(successCallback);
-
         // Add the form to the document body
         document.body.appendChild(form);
-
-        // Define success callback function
-        window.handleFormSubmitSuccess = function() {
-            // Success vibration pattern
-            if (window.navigator.vibrate) {
-                window.navigator.vibrate([50, 100, 50]);
-            }
-            showToast('Attendance submitted successfully! 👍');
-            
-            // Clean up
-            if (document.body.contains(form)) {
-                document.body.removeChild(form);
-            }
-        };
 
         // Submit the form
         form.submit();
@@ -489,9 +475,12 @@ async function submitAttendance() {
             }
             showToast('Attendance submitted successfully! 👍');
             
-            // Clean up form
+            // Clean up form and iframe
             if (document.body.contains(form)) {
                 document.body.removeChild(form);
+            }
+            if (document.body.contains(iframe)) {
+                document.body.removeChild(iframe);
             }
         }, 2000);
 
